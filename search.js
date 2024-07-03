@@ -1,40 +1,82 @@
-function search() {
-    // Получаем значение из инпута
-    var searchText = document.getElementById('searchInput').value.trim();
 
-    // Получаем элемент, в котором будем искать
-    var container = document.querySelector('.section__list'); // Можно заменить на другой элемент, если нужно искать только в определенной области страницы
 
-    // Создаем регулярное выражение для поиска текста
-    var regex = new RegExp(searchText, 'gi'); // 'gi' означает "глобальный поиск (global)" и "игнорирование регистра (case-insensitive)"
+// function searchProducts() {
+//     const input = document.getElementById('searchInput').value.toLowerCase();
+//     const resultsContainer = document.getElementById('searchResultsContainer');
+//     const resultsList = document.getElementById('searchResults');
+//     resultsList.innerHTML = '';
 
-    // Находим все элементы, содержимое которых соответствует регулярному выражению
-    var elements = container.querySelectorAll('*'); // Ищем во всех элементах
+//     if (input) {
+//         const filteredProducts = products.filter(product =>
+//             product.name.toLowerCase().includes(input) ||
+//             product.description.toLowerCase().includes(input)
+//         );
 
-    // Получаем контейнер для результатов поиска
-    var resultsContainer = document.getElementById('searchResults');
+//         filteredProducts.forEach(product => {
+//             const listItem = document.createElement('li');
+//             listItem.style.listStyle = 'none';
+//             listItem.innerHTML = `
+//                 <div class="search__product">
+//                     <img src="${product.image}" alt="${product.name}" style="width:100px;height:auto;">
+//                     <h3>${product.name}</h3>
+//                     <p>${product.description}</p>
+//                     <p>Цена: ${product.price} ₽</p>
+//                     <button class="add__to__cart" onclick="addToCart(${product.id})">Добавить в корзину</button>
+//                 </div>
+//             `;
+//             resultsList.appendChild(listItem);
+//         });
 
-    // Очищаем результаты предыдущего поиска
-    resultsContainer.innerHTML = '';
+//         resultsContainer.style.display = 'block';
+//     } else {
+//         resultsContainer.style.display = 'none';
+//     }
+// }
+function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    if (product) {
+        const cartItems = document.getElementById('cartItems');
+        const cartItem = document.createElement('li');
+        cartItem.classList.add('cart__list')
+        cartItem.innerHTML = `
+            <img src="${product.image}" alt="${product.name}" class="cartImg">
+           <span class="name__list"> ${product.name} - ${product.price} ₽</span>
+        `;
+        cartItems.appendChild(cartItem);
+    }
+}
+function searchProducts() {
+    const input = document.getElementById('searchInput').value.toLowerCase();
+    const resultsContainer = document.getElementById('searchResultsContainer');
+    const resultsList = document.getElementById('searchResults');
+    resultsList.innerHTML = '';
 
-    // Проверяем, есть ли текст для поиска
-    if (searchText !== '') {
-        // Перебираем найденные элементы и отображаем их
-        elements.forEach(function (element) {
-            // Проверяем содержимое элемента
-            if (element.innerText.match(regex)) {
-                // Если содержимое соответствует регулярному выражению, добавляем элемент в результаты поиска
-                var resultItem = document.createElement('div');
-                resultItem.classList.add('searchdiv');
-                resultItem.textContent = element.innerText;
-                resultsContainer.appendChild(resultItem);
-            }
-        });
+    if (input) {
+        const filteredProducts = products.filter(product =>
+            product.name.toLowerCase().includes(input) ||
+            product.description.toLowerCase().includes(input)
+        );
 
-        // Показываем контейнер с результатами поиска
-        document.getElementById('searchResultsContainer').style.display = 'block';
+        if (filteredProducts.length > 0) {
+            filteredProducts.slice(0, 3).forEach(product => {
+                const listItem = document.createElement('li');
+                listItem.style.listStyle = 'none';
+                listItem.innerHTML = `
+                    <div class="search__product">
+                        <img src="${product.image}" alt="${product.name}" style="width:100px;height:auto;">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <p>Цена: ${product.price} ₽</p>
+                        <button class="add__to__cart" onclick="addToCart(${product.id})">Добавить в корзину</button>
+                    </div>
+                `;
+                resultsList.appendChild(listItem);
+            });
+            resultsContainer.style.display = 'block';
+        } else {
+            resultsContainer.style.display = 'none';
+        }
     } else {
-        // Скрываем контейнер с результатами поиска, если инпут пустой
-        document.getElementById('searchResultsContainer').style.display = 'none';
+        resultsContainer.style.display = 'none';
     }
 }

@@ -21,7 +21,7 @@ function closeModal() {
 closeTime.addEventListener('click', closeModal);
 // Проверяем, что текущее время находится в диапазоне от 11 до 22 часов
 if (currentTime >= 11 && currentTime <= 22) {
-    console.log('allisgood')
+    // console.log('allisgood')
 } else {
     warning.style.display = 'block'; // Скрываем затемненный задний экран и модальное окно
 }
