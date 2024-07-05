@@ -141,44 +141,11 @@
 // })
 
 document.addEventListener("DOMContentLoaded", (event) => {
-  /*const inputPrice = document.querySelector(".input-price");
+  const data = new FormData();
+  const inputPrice = document.querySelector(".input-price");
   const inputName = document.querySelector(".input-name");
-  const inputOrder = document.querySelector(".input-order");*/
-
-  function sendCartItem() {
-    const cartData = cartItems.map((item) => ({
-      id: item.id,
-      name: item.name,
-      price: item.price * item.quantity,
-      quantity: item.quantity,
-    }));
-
-    function createFormData(orderData) {
-      let formData = new FormData();
-      orderData.forEach((item) => {
-        for (let key in item) {
-          formData.append(`${key}, ${item[key]}`);
-        }
-      });
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-      }
-      return formData;
-    }
-    let formData = createFormData(cartData);
-    sendFormData(formData);
-
-    function sendFormData(formData) {
-      fetch("./send.php", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => console.log(data))
-        .catch((error) => console.error("Ошибка:", error));
-    }
-  }
-
+  const inputOrder = document.querySelector(".input-order");
+  let cartItems = [];
 
   function removeFromCart(productId) {
     cartItems = cartItems.filter((item) => item.id !== productId);
@@ -216,6 +183,26 @@ document.addEventListener("DOMContentLoaded", (event) => {
       imageElement.alt = item.name;
       imageElement.classList.add("cartImg");
       listItem.appendChild(imageElement);
+
+
+
+      const inputCount = document.createElement("input");
+      inputCount.setAttribute("type", 'hidden');
+      inputCount.setAttribute('name', 'count');
+      inputCount.setAttribute('value', `${item.quantity}`);
+      listItem.appendChild(inputCount);
+
+      const inputPrice = document.createElement("input");
+      inputCount.setAttribute("type", 'hidden');
+      inputCount.setAttribute('name', 'count');
+      inputCount.setAttribute('value', `${item.price}`);
+      listItem.appendChild(inputPrice);
+
+      const inputName = document.createElement("input");
+      inputCount.setAttribute("type", 'hidden');
+      inputCount.setAttribute('name', 'count');
+      inputCount.setAttribute('value', `${item.name}`);
+      listItem.appendChild(inputName);
 
       // Create and append the text content
       const textContent = document.createElement("span");
@@ -291,6 +278,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       price: item.price * item.quantity,
       quantity: item.quantity,
     }));
+    console.log(cartData)
 
     fetch('./send.php', {
       method: 'POST',
@@ -309,7 +297,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   }
 
   document.querySelector('.get__offer').addEventListener('click', () => {
-    sendCartItem();
+    sendCartItems();
   });
 });
 
