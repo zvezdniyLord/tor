@@ -144,35 +144,39 @@ document.addEventListener("DOMContentLoaded", (event) => {
   /*const inputPrice = document.querySelector(".input-price");
   const inputName = document.querySelector(".input-name");
   const inputOrder = document.querySelector(".input-order");*/
-  let orderData = [
-    { id: 1, names: 'Филадельфия', quantity: 2, price: 450 },
-    { id: 2, names: 'Волна', quantity: 1, price: 380 }
-  ];
+  function sendCartItem() {
+    const cartData = cartItems.map((item) => ({
+      id: item.id,
+      name: item.name,
+      price: item.price * item.quantity,
+      quantity: item.quantity,
+    }));
 
-  // Функция для создания и отправки FormData
-  function sendOrderData(orderData) {
-    let formData = new FormData();
+    function createFormData(orderData) {
+      let formData = new FormData();
+      orderData.forEach((item) => {
+        for (let key in item) {
+          formData.append(key, item[key]);
+        }
+      });
+      for (let [key, value] of formData.entries()) {
+        console.log(key + ' ' + value);
+      }
+      return formData;
+    }
+    let formData = createFormData(cartData);
+    sendFormData(formData);
 
-    // Добавляем данные заказа в FormData
-    orderData.forEach((item, index) => {
-      formData.append(items[${index}][id], item.id);
-      formData.append(items[${index}][names], item.name);
-      formData.append(items[${index}][quantity], item.quantity);
-      formData.append(items[${index}][price], item.price);
-    });
-
-    // Отправляем FormData на сервер
-    fetch('./send.php', {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Ошибка:', error));
+    function sendFormData(formData) {
+      fetch("./send.php", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((error) => console.error("Ошибка:", error));
+    }
   }
-
-  // Вызываем функцию с данными заказа
-  sendOrderData(orderData);
 
 
   function removeFromCart(productId) {
@@ -304,7 +308,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   }
 
   document.querySelector('.get__offer').addEventListener('click', () => {
-    sendOrderData();
+    sendCartItem();
   });
 });
 
