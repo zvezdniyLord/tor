@@ -193,17 +193,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
       listItem.appendChild(inputCount);
 
       const inputPrice = document.createElement("input");
-      inputCount.setAttribute("type", 'hidden');
-      inputCount.setAttribute('name', 'count');
-      inputCount.setAttribute('value', `${item.price}`);
+      inputPrice.setAttribute("type", 'hidden');
+      inputPrice.setAttribute('name', 'price');
+      inputPrice.setAttribute('value', `${item.price}`);
       listItem.appendChild(inputPrice);
 
       const inputName = document.createElement("input");
-      inputCount.setAttribute("type", 'hidden');
-      inputCount.setAttribute('name', 'count');
-      inputCount.setAttribute('value', `${item.name}`);
+      inputName.setAttribute("type", 'hidden');
+      inputName.setAttribute('name', 'order');
+      inputName.setAttribute('value', `${item.name}`);
       listItem.appendChild(inputName);
-
       // Create and append the text content
       const textContent = document.createElement("span");
       textContent.classList.add("name__list");
