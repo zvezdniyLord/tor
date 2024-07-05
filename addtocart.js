@@ -144,6 +144,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   /*const inputPrice = document.querySelector(".input-price");
   const inputName = document.querySelector(".input-name");
   const inputOrder = document.querySelector(".input-order");*/
+
   function sendCartItem() {
     const cartData = cartItems.map((item) => ({
       id: item.id,
@@ -156,11 +157,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
       let formData = new FormData();
       orderData.forEach((item) => {
         for (let key in item) {
-          formData.append(key, item[key]);
+          formData.append(`${key}, ${item[key]}`);
         }
       });
       for (let [key, value] of formData.entries()) {
-        console.log(key + ' ' + value);
+        console.log(`${key}: ${value}`);
       }
       return formData;
     }
@@ -291,7 +292,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       quantity: item.quantity,
     }));
 
-    fetch('/submit-cart', {
+    fetch('./send.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
