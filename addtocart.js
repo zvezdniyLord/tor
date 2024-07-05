@@ -141,8 +141,39 @@
 // })
 
 document.addEventListener("DOMContentLoaded", (event) => {
-  const data = new FormData();
-  let cartItems = [];
+  /*const inputPrice = document.querySelector(".input-price");
+  const inputName = document.querySelector(".input-name");
+  const inputOrder = document.querySelector(".input-order");*/
+  let orderData = [
+    { id: 1, names: 'Филадельфия', quantity: 2, price: 450 },
+    { id: 2, names: 'Волна', quantity: 1, price: 380 }
+  ];
+
+  // Функция для создания и отправки FormData
+  function sendOrderData(orderData) {
+    let formData = new FormData();
+
+    // Добавляем данные заказа в FormData
+    orderData.forEach((item, index) => {
+      formData.append(items[${index}][id], item.id);
+      formData.append(items[${index}][names], item.name);
+      formData.append(items[${index}][quantity], item.quantity);
+      formData.append(items[${index}][price], item.price);
+    });
+
+    // Отправляем FormData на сервер
+    fetch('./send.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Ошибка:', error));
+  }
+
+  // Вызываем функцию с данными заказа
+  sendOrderData(orderData);
+
 
   function removeFromCart(productId) {
     cartItems = cartItems.filter((item) => item.id !== productId);
@@ -184,7 +215,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
       // Create and append the text content
       const textContent = document.createElement("span");
       textContent.classList.add("name__list");
-      textContent.textContent = `${item.name} - ${item.price} R количество - ${item.quantity}`;
+      textContent.textContent = `${item.name} - ${item.price * item.quantity} R количество - ${item.quantity}`;
+      /*inputName.setAttribute("value", item.name);
+      inputPrice.setAttribute("value", item.price * item.quantity);
+      inputOrder.setAttribute("value", item.quantity);*/
       listItem.appendChild(textContent);
 
       // Create and append the remove button
@@ -249,10 +283,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const cartData = cartItems.map(item => ({
       id: item.id,
       name: item.name,
-      price: item.price,
+      price: item.price * item.quantity,
       quantity: item.quantity,
     }));
-    console.log(cartData)
 
     fetch('/submit-cart', {
       method: 'POST',
@@ -271,7 +304,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   }
 
   document.querySelector('.get__offer').addEventListener('click', () => {
-    sendCartItems();
+    sendOrderData();
   });
 });
 
@@ -290,4 +323,3 @@ document.querySelectorAll('.cat1__product').forEach(product => {
 
     products.push({ id: parseInt(id, 10), name, description, price, image });
 });
-
