@@ -1,6 +1,6 @@
 <?php
 
-$token = "7238360214:AAED9R27wBHgJVnU4nCw4LavUxrZ0L9gubA";
+/*$token = "7238360214:AAED9R27wBHgJVnU4nCw4LavUxrZ0L9gubA";
 
 $chat_id = "170195649";
 
@@ -31,4 +31,17 @@ if ($_POST['act'] == 'order') {
         echo($txt);
         alert('Что-то пошло не так. ПОпробуйте отправить форму ещё раз.');
     }
+}*/
+
+if(isset($_POST['act']))
+{
+    $apiToken = "7238360214:AAED9R27wBHgJVnU4nCw4LavUxrZ0L9gubA";
+    $data = [
+        'chat_id' => '170195649',
+        'id' => $_POST['id'],
+        'name' => $_POST['name'],
+        'price' => $_POST['price'],
+        'order' => $_POST['order']
+    ];
+    $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" . http_build_query($data) );
 }
