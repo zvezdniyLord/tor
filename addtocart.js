@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
       const inputCount = document.createElement("input");
       inputCount.setAttribute("type", 'hidden');
-      inputCount.setAttribute('name', 'count');
+      inputCount.setAttribute('name', 'name');
       inputCount.setAttribute('value', `${item.quantity}`);
       listItem.appendChild(inputCount);
 

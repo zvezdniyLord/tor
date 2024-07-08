@@ -1,37 +1,34 @@
 <?php
 
-  const TOKEN = '7238360214:AAED9R27wBHgJVnU4nCw4LavUxrZ0L9gubA';
-  const CHATID = '170195649';
+$token = "7238360214:AAED9R27wBHgJVnU4nCw4LavUxrZ0L9gubA";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  foreach($_SERVER as $arr) {
-    echo($arr);
-  }
-  $fileSendStatus = '';
-  $textSendStatus = '';
-  $msgs = [];
+$chat_id = "170195649";
 
-  if (!empty($_POST['name']) && !empty($_POST['price']) && !empty($_POST['order'])) {
+if ($_POST['act'] == 'order') {
+    $name = ($_POST['id']);
+    $phone = ($_POST['name']);
+    $email = ($_POST['price']);
+    $textarea = ($_POST['order']);
 
+    $arr = array(
+        'Имя:' => $name,
+        'Телефон:' => $phone,
+        'Почта' => $email,
+        'Текст' => $textarea
+    );
+    foreach($arr as $key => $value) {
+        $txt .= "<b>".$key."</b> ".$value."%0A";
+    };
 
-    $txt = "";
+    $sendToTelegram = fopen("https://api.telegram.org/bot{$token}/sendMessage?chat_id={$chat_id}&parse_mode=html&text={$txt}","r");
 
-    if (isset($_POST['name']) && !empty($_POST['name'])) {
-        $txt .= "Имя пославшего: " . strip_tags(trim(urlencode($_POST['name']))) . "%0A";
+    if ($sendToTelegram) {
+        echo($txt);
+        alert('Спасибо! Ваша заявка принята. Мы свяжемся с вами в ближайшее время.');
     }
 
-    if (isset($_POST['price']) && !empty($_POST['price'])) {
-        $txt .= "Телефон: " . strip_tags(trim(urlencode($_POST['price']))) . "%0A";
+    else {
+        echo($txt);
+        alert('Что-то пошло не так. ПОпробуйте отправить форму ещё раз.');
     }
-
-    if (isset($_POST['order']) && !empty($_POST['order'])) {
-        $txt .= "Тема: " . strip_tags(urlencode($_POST['order']));
-    }
-
-    $textSendStatus = @file_get_contents('https://api.telegram.org/bot'. TOKEN .'/sendMessage?chat_id=' . CHATID . '&parse_mode=html&text=' . $txt);
-  } else {
-    echo json_encode('NOTVALID');
-  }
-} else {
-  header("Location: /");
 }
