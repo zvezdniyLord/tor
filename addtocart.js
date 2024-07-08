@@ -141,10 +141,8 @@
 // })
 
 document.addEventListener("DOMContentLoaded", (event) => {
-  const data = new FormData();
-  const inputPrice = document.querySelector(".input-price");
-  const inputName = document.querySelector(".input-name");
-  const inputOrder = document.querySelector(".input-order");
+  const form = document.querySelector("form");
+  const formData = new FormData(form);
   let cartItems = [];
 
   function removeFromCart(productId) {
@@ -277,14 +275,21 @@ document.addEventListener("DOMContentLoaded", (event) => {
       price: item.price * item.quantity,
       quantity: item.quantity,
     }));
-    console.log(cartData)
-
+    const fd = () => {
+      const data = cartItems.map(item => {
+        formData.append("id", item.id);
+        formData.append("name", item.name);
+        formData.append("price", item.price);
+        formData.append("quantity", item.quantity);
+      })
+      return data;
+    }
     fetch('./send.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(cartData)
+      body: JSON.stringify(fd())
     })
       .then(response => response.json())
       .then(data => {
